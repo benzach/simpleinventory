@@ -42,7 +42,7 @@ namespace SimpleInventory.Controllers
             //    res => Ok(res) as IActionResult);
             //return o;
             var t = await Task.Run(() => GetItemRepo());
-            var rr=t.Bind(lst => lst.Select(v => { var cp = Util.Copy(v.Item1); cp.Quantity += 10; return (cp, cp.Id); }).ToBusinessRepoIII());
+            var rr=t.Bind(lst => lst.Select(v => { var cp = Util.Copy(v.Item1); cp.Quantity += 10; return (cp, cp.Id); }).ToRepository());
             var o = rr.Data.Select(x => x.Value());
             return Ok(o);
         }

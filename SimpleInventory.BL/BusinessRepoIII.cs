@@ -55,7 +55,7 @@ namespace SimpleInventory.BL
 
     public static class BusinessRepoIIIExt
     {
-        public static Repository<T, TKey> ToBusinessRepoIII<T, TKey>(this IEnumerable<(T, TKey)> @this)
+        public static Repository<T, TKey> ToRepository<T, TKey>(this IEnumerable<(T, TKey)> @this)
             => new Repository<T, TKey>(@this);
 
         public static Repository<R, RKey> Apply<T, TKey, R, RKey>(
@@ -64,23 +64,23 @@ namespace SimpleInventory.BL
             => (from ft in fthis.Data
                 from t in BT.Data
                 select (ft.Value()(t.Value()), ft.Key(t.Key)))
-                .ToBusinessRepoIII();
+                .ToRepository();
 
         public static Repository<Func<T2, R>, Func<TKey2, RKey>> Apply<T1, T2, R, TKey1, TKey2, RKey>(this Repository<Func<T1, T2, R>, Func<TKey1, TKey2, RKey>> fthis, Repository<T1, TKey1> BT1)
         => (from ft in fthis.Data
             from t in BT1.Data
             select (F.Apply(ft.Value(), t.Value()), F.Apply(ft.Key, t.Key)))
-            .ToBusinessRepoIII();
+            .ToRepository();
         public static Repository<Func<T2, T3, R>, Func<TKey2, TKey3, RKey>> Apply<T1, T2, T3, R, TKey1, TKey2, TKey3, RKey>(this Repository<Func<T1, T2, T3, R>, Func<TKey1, TKey2, TKey3, RKey>> fthis, Repository<T1, TKey1> BT1)
             => (from ft in fthis.Data
                 from t in BT1.Data
                 select (F.Apply(ft.Value(), t.Value()), F.Apply(ft.Key, t.Key)))
-            .ToBusinessRepoIII();
+            .ToRepository();
         public static Repository<Func<T2, T3, T4, R>, Func<TKey2, TKey3, TKey4, RKey>> Apply<T1, T2, T3, T4, R, TKey1, TKey2, TKey3, TKey4, RKey>(this Repository<Func<T1, T2, T3, T4, R>, Func<TKey1, TKey2, TKey3, TKey4, RKey>> fthis, Repository<T1, TKey1> BT1)
             => (from ft in fthis.Data
                 from t in BT1.Data
                 select (F.Apply(ft.Value(), t.Value()), F.Apply(ft.Key, t.Key)))
-                .ToBusinessRepoIII();
+                .ToRepository();
         public static Repository<RR, RRKey> SelectMany<T, R, RR, TKey, RKey, RRKey>(
             this Repository<T, TKey> @this,
             Func<(T value, TKey key), Repository<R, RKey>> bind,
@@ -92,10 +92,10 @@ namespace SimpleInventory.BL
                                     .Select(y
                                              =>proj((x.Value(), x.Key),(y.Value(),y.Key))
                                             )
-                                ).ToBusinessRepoIII();
+                                ).ToRepository();
 
         public static Repository<R, RKey> Select<T, R, TKey, RKey>(this Repository<T, TKey> @this, Func<(T, TKey), Repository<R, RKey>> f)
-            => @this.Data.SelectMany(x => f((x.Value(), x.Key)).Data.Select(y => (y.Value(), y.Key))).ToBusinessRepoIII();  //.Bind(y => f(y));
+            => @this.Data.SelectMany(x => f((x.Value(), x.Key)).Data.Select(y => (y.Value(), y.Key))).ToRepository();  //.Bind(y => f(y));
 
     }
 }

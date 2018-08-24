@@ -34,16 +34,16 @@ namespace SimpleInventory.BL
                {
                    //var res = GetAllItems();
                    var itemRepo = GetAllItems().Match(
-                       () => (new List<(Item, long)>()).ToBusinessRepoIII(),
-                       lst => lst.Select(x => (x, x.Id)).ToBusinessRepoIII()
+                       () => (new List<(Item, long)>()).ToRepository(),
+                       lst => lst.Select(x => (x, x.Id)).ToRepository()
                        );
                    var suppplierRepo = GetAllSuppliers().Match(
-                       () => (new List<(Supplier, int)>()).ToBusinessRepoIII(),
-                       lst => lst.Select(x => (x, x.Id)).ToBusinessRepoIII()
+                       () => (new List<(Supplier, int)>()).ToRepository(),
+                       lst => lst.Select(x => (x, x.Id)).ToRepository()
                        );
                    var CategoriesRepo = GetAllItemCategoriesType(7).Match(
-                       () => (new List<(Code_Value, int)>()).ToBusinessRepoIII(),
-                       lst => lst.Select(x => (x, x.Id)).ToBusinessRepoIII()
+                       () => (new List<(Code_Value, int)>()).ToRepository(),
+                       lst => lst.Select(x => (x, x.Id)).ToRepository()
                        );
                    Func<Item, Code_Value, Supplier, Option<InventoryItem>> createInventory = (itm, cv, sup)
                      => itm.CategoryId == cv.Id && itm.SupplierId == sup.Id ?

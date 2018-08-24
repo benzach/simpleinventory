@@ -242,10 +242,10 @@ namespace SimpleInventoryTest
         public void Given_Different_Repo_Use_Partial_Function_to_apply_different_repo_finally_return_BusObj2()
         {
             var aaa = ClassesEnrolled.Select(x => x.id).Distinct();
-            Repository<ClassEnrolled, int> classesEnrolledRepo = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToBusinessRepoIII();            
-            Repository<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
-            Repository<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
-            Repository<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
+            Repository<ClassEnrolled, int> classesEnrolledRepo = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToRepository();            
+            Repository<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToRepository();
+            Repository<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToRepository();
+            Repository<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToRepository();
             Func<Person, Code_Value, ClassEnrolled, Option<StudentSchedule>> CreateStudent =
                 (p, Classification_cv, classEnroll)
                 => p.ClassificationId == Classification_cv.Id && p.Id== classEnroll.studentId ? Some(new StudentSchedule
@@ -298,10 +298,10 @@ namespace SimpleInventoryTest
         public void Given_Different_Repo_Use_Partial_Function_to_apply_different_repo_finally_return_BusObj3()
         {
             var aaa = ClassesEnrolled.Select(x => x.id).Distinct();
-            Repository<ClassEnrolled, int> classesEnrolledRepo = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToBusinessRepoIII();
-            Repository<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
-            Repository<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
-            Repository<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
+            Repository<ClassEnrolled, int> classesEnrolledRepo = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToRepository();
+            Repository<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToRepository();
+            Repository<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToRepository();
+            Repository<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToRepository();
             Func<Person, Code_Value, ClassEnrolled, Option<StudentSchedule>> CreateStudent =
                 (p, Classification_cv, classEnroll)
                 => p.ClassificationId == Classification_cv.Id && p.Id == classEnroll.studentId ? Some(new StudentSchedule
@@ -366,11 +366,11 @@ namespace SimpleInventoryTest
         [Fact]
         public void Given_Different_Repo_Use_Partial_Function_to_apply_different_repo_finally_return_BusObj4()
         {
-            Repository<ClassEnrolled, int> modifiedClassRepo = ModifiedClassEnrolled.Select(x => (val: x, key: x.id)).ToBusinessRepoIII();
-            Repository<ClassEnrolled, int> classesEnrolledRepo = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToBusinessRepoIII();
-            Repository<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
-            Repository<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
-            Repository<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
+            Repository<ClassEnrolled, int> modifiedClassRepo = ModifiedClassEnrolled.Select(x => (val: x, key: x.id)).ToRepository();
+            Repository<ClassEnrolled, int> classesEnrolledRepo = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToRepository();
+            Repository<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToRepository();
+            Repository<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToRepository();
+            Repository<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToRepository();
             Func<Person, Code_Value, ClassEnrolled, Option<StudentSchedule>> CreateStudent =
                 (p, Classification_cv, classEnroll)
                 => p.ClassificationId == Classification_cv.Id && p.Id == classEnroll.studentId ? Some(new StudentSchedule
