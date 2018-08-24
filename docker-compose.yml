@@ -1,0 +1,36 @@
+version: '3'
+networks:
+    frontend:
+    backend:
+
+services:
+  simpleinventory:
+    image: simpleinventory
+    build:
+      context: .
+      dockerfile: SimpleInventory/Dockerfile
+    environment:
+      - DatabaseServer=mssqlserver
+      - DatabaseName=SimpleInventoryDb
+      - DatabaseUser=sa
+      - DatabasePassword=Password123!
+    container_name: simpleinventoryapi
+    ports:
+      - "5000:80"
+    networks:
+      - backend
+      - frontend
+    depends_on:
+      - mssqlserver
+  mssqlserver:
+    image: "microsoft/mssql-server-linux:latest"
+    ports:
+      - "1445:1433"
+    container_name: mssqlcontainer
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123!
+    networks:
+      - backend
+   
+

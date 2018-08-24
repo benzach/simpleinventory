@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Functional\**" />
+    <Compile Remove="Models\**" />
+    <Content Remove="Functional\**" />
+    <Content Remove="Models\**" />
+    <EmbeddedResource Remove="Functional\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Functional\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\ControllerActivator.cs" />
+    <Compile Remove="Migrations\20180719183952_initialcreate.cs" />
+    <Compile Remove="Migrations\20180719183952_initialcreate.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkcore.tools" Version="2.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Functional.Lib\Functional.Lib.csproj" />
+    <ProjectReference Include="..\SimpleInventory.BL\SimpleInventory.BL.csproj" />
+    <ProjectReference Include="..\SimpleInventory.DL\SimpleInventory.DL.csproj" />
+  </ItemGroup>
+
+</Project>

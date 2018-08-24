@@ -1,0 +1,22 @@
+in .csproj file add to itemgroup
+<packagereference include="swashbuckle.aspnetcore" version="1.1.0"/>
+
+in startup.cs add in configurationservice methd
+serivce.addswaggergne(options=>
+{
+options.descbeallenumAsString();
+option.swaggerdoc('v1",new swashbuckle.aspnetcore.swagger.info
+{
+	title="title",
+	version="v1",
+	description="description",
+	termsofservice"term of service"
+});
+});
+
+in configure method add
+
+app.UseSwagger().useSwaggerUI(c=>
+{
+c.SwaggerEndpoing($"/swager/v1/swagger.json", "productcatalogapi v1");
+});

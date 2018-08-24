@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Functional\**" />
+    <EmbeddedResource Remove="Functional\**" />
+    <None Remove="Functional\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="IIdentity.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Functional.Lib\Functional.Lib.csproj" />
+    <ProjectReference Include="..\SimpleInventory.DL\SimpleInventory.DL.csproj" />
+  </ItemGroup>
+
+</Project>
