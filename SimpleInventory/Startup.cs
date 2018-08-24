@@ -128,7 +128,7 @@ namespace SimpleInventory
             //services.AddTransient<Func<long, Option<Item>>>(cont => id => { p[0].Value = id; return FromNullable(simpleInventorydb.Items.FromSql($"GetItemByID @id, @errorcode", p).SingleOrDefault()); });
             services.AddTransient<Func<long, Option<Item>>>(cont => GetDbThing<long, Option<Item>>(services, (id,db)=> { p[0].Value = id; return FromNullable(db.Items.FromSql($"GetItemByID @id, @errorcode", p).SingleOrDefault()); }));
             //services.AddTransient<Func<BusinessRepoIII<Item, long>>>(cont => () => simpleInventorydb.Items.ToList().Select(x => (val: x, key: x.Id)).ToBusinessRepoIII());
-            services.AddTransient<Func<BusinessRepoIII<Item, long>>>(cont => GetDbThing<BusinessRepoIII<Item, long>>(services, db => db.Items.ToList().Select(x => (val: x, key: x.Id)).ToBusinessRepoIII()));
+            services.AddTransient<Func<Repository<Item, long>>>(cont => GetDbThing<Repository<Item, long>>(services, db => db.Items.ToList().Select(x => (val: x, key: x.Id)).ToBusinessRepoIII()));
             //services.AddTransient<Func<string, Option<IEnumerable<Item>>>>(prov => (NameSearch) => FromPossibleZeroLength<IEnumerable<Item>, Item>(simpleInventorydb.Items.Where(x => x.Name.Contains(NameSearch))));
             services.AddTransient<Func<string, Option<IEnumerable<Item>>>>(prov => GetDbThing<string, Option<IEnumerable<Item>>>(services, (namesearch, db) => FromPossibleZeroLength<IEnumerable<Item>,Item>(db.Items.Where(x => x.Name.Contains(namesearch)).ToList())));
             //services.AddTransient<Func<int, Option<IEnumerable<Code_Value>>>>(prov => (codsetId) => FromPossibleZeroLength<IEnumerable<Code_Value>, Code_Value>(simpleInventorydb.Code_Values.Where(cv => cv.CodeSetId == codsetId)));

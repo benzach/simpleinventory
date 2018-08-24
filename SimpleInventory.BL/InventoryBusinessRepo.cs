@@ -30,7 +30,7 @@ namespace SimpleInventory.BL
             GetAllItemCategoriesType = getAllItemCategoriesType;
             GetAllSuppliers = getAllSuppliers;
         }
-        public Func<BusinessRepoIII<Option<InventoryItem>, string>> GetRepo => () =>
+        public Func<Repository<Option<InventoryItem>, string>> GetRepo => () =>
                {
                    //var res = GetAllItems();
                    var itemRepo = GetAllItems().Match(
@@ -51,7 +51,7 @@ namespace SimpleInventory.BL
                         None;
                    Func<long, int, int, string> createKey = (itemid, cvid, supid)
                         => $"{itemid}-{cvid}-{supid}";
-                   BusinessRepoIII<Func<Item, Code_Value, Supplier, Option<InventoryItem>>, Func<long, int, int, string>> CreateInventRepo =
+                   Repository<Func<Item, Code_Value, Supplier, Option<InventoryItem>>, Func<long, int, int, string>> CreateInventRepo =
                    (createInventory, createKey);
 
                    var resRepo = CreateInventRepo

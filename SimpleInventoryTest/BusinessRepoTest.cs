@@ -39,7 +39,7 @@ namespace SimpleInventoryTest
         public void Given_A_BusinessRepo_Of_T_Bind_To_Get_BusinessRepo_Of_R()
         {
             var p = new Person { Id = 1, Name = "Tom", Description = "Tall" };
-            BusinessRepoIII<Person, int> personRepo = (val:p ,key:p.Id);
+            Repository<Person, int> personRepo = (val:p ,key:p.Id);
             var StudentRepo = personRepo.Bind<Student, string>(x 
                 => x.Select(b => (
                                        val:new Student
@@ -102,7 +102,7 @@ namespace SimpleInventoryTest
         [Fact]
         public void Given_A_Repo_Of_T_Return_Only_Repo_Of_R_Based_on_D()
         {
-            BusinessRepoIII<Person, int> peopleRepo = lst.Select(x=>(val:x,key:x.Id)).ToList();
+            Repository<Person, int> peopleRepo = lst.Select(x=>(val:x,key:x.Id)).ToList();
             var StudentRepo=peopleRepo.Bind<Student,string>(lstpeop => lstpeop
                                         .Where(x => x.Item1.CategoryType == 1)
                                         .Select(y => (
@@ -188,10 +188,10 @@ namespace SimpleInventoryTest
         [Fact]
         public void Given_Different_Repo_Use_Partial_Function_to_apply_different_repo_finally_return_BusObj()
         {
-            BusinessRepoIII<ClassEnrolled, int> classesEnrolled = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToList();
-            BusinessRepoIII<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToList();
-            BusinessRepoIII<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToList();
-            BusinessRepoIII<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToList();
+            Repository<ClassEnrolled, int> classesEnrolled = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToList();
+            Repository<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToList();
+            Repository<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToList();
+            Repository<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToList();
             Func<List<Code_Value>, List<Person>, List<StudentBL>> CreateStudent =
                 (lstClassifications, people)
                 => people.Select(x => new StudentBL
@@ -203,7 +203,7 @@ namespace SimpleInventoryTest
 
             Func<Person, Student> createStd = (p) => new Student { StudentID = $"{p.Id}-{p.Name}", Name = p.Name };
             Func<int, string> createID = i => i.ToString();
-            BusinessRepoIII<Func<Person, Student>, Func<int, string>> CreateStudentRepo = (val: createStd, key: createID);
+            Repository<Func<Person, Student>, Func<int, string>> CreateStudentRepo = (val: createStd, key: createID);
             var res=CreateStudentRepo.Apply(peopleRepo);
 
             Assert.Equal(lst.Where(x => x.CategoryType == 1).Count() ,res.Data.Count());
@@ -213,10 +213,10 @@ namespace SimpleInventoryTest
         [Fact]
         public void Given_Different_Repo_Use_Partial_Function_to_apply_different_repo_finally_return_BusObj1()
         {
-            BusinessRepoIII<ClassEnrolled, int> classesEnrolled = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToList();
-            BusinessRepoIII<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToList();
-            BusinessRepoIII<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToList();
-            BusinessRepoIII<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToList();
+            Repository<ClassEnrolled, int> classesEnrolled = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToList();
+            Repository<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToList();
+            Repository<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToList();
+            Repository<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToList();
             Func<Person,Code_Value,Option<StudentBL>> CreateStudent =
                 (p, Classification_cv)
                 =>  p.ClassificationId==Classification_cv.Id?Some( new StudentBL
@@ -228,7 +228,7 @@ namespace SimpleInventoryTest
             Func<int,int, string> createkeyy =
                 (pid, cv)
                 => $"{pid}={cv}";
-            BusinessRepoIII<Func< Person, Code_Value, Option<StudentBL>>, Func<int,int, string>> CreateStudentRepo1 =
+            Repository<Func< Person, Code_Value, Option<StudentBL>>, Func<int,int, string>> CreateStudentRepo1 =
                 (val: CreateStudent, key: createkeyy);
             var a1 = CreateStudentRepo1
                 .Apply(peopleRepo)
@@ -242,10 +242,10 @@ namespace SimpleInventoryTest
         public void Given_Different_Repo_Use_Partial_Function_to_apply_different_repo_finally_return_BusObj2()
         {
             var aaa = ClassesEnrolled.Select(x => x.id).Distinct();
-            BusinessRepoIII<ClassEnrolled, int> classesEnrolledRepo = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToBusinessRepoIII();            
-            BusinessRepoIII<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
-            BusinessRepoIII<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
-            BusinessRepoIII<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
+            Repository<ClassEnrolled, int> classesEnrolledRepo = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToBusinessRepoIII();            
+            Repository<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
+            Repository<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
+            Repository<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
             Func<Person, Code_Value, ClassEnrolled, Option<StudentSchedule>> CreateStudent =
                 (p, Classification_cv, classEnroll)
                 => p.ClassificationId == Classification_cv.Id && p.Id== classEnroll.studentId ? Some(new StudentSchedule
@@ -260,7 +260,7 @@ namespace SimpleInventoryTest
             Func<int, int,int, string> createkeyy =
                 (pid, cv,cls)
                 => $"{pid}-{cv}-{cls}";
-            BusinessRepoIII<Func<Person, Code_Value, ClassEnrolled, Option<StudentSchedule>>, Func<int,int, int, string>> CreateStudentRepo1 =
+            Repository<Func<Person, Code_Value, ClassEnrolled, Option<StudentSchedule>>, Func<int,int, int, string>> CreateStudentRepo1 =
                 (val: CreateStudent, key: createkeyy);
             var x1 = CreateStudentRepo1.Apply(peopleRepo);
             var x2 = x1.Apply(ClassificationRepo);
@@ -298,10 +298,10 @@ namespace SimpleInventoryTest
         public void Given_Different_Repo_Use_Partial_Function_to_apply_different_repo_finally_return_BusObj3()
         {
             var aaa = ClassesEnrolled.Select(x => x.id).Distinct();
-            BusinessRepoIII<ClassEnrolled, int> classesEnrolledRepo = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToBusinessRepoIII();
-            BusinessRepoIII<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
-            BusinessRepoIII<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
-            BusinessRepoIII<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
+            Repository<ClassEnrolled, int> classesEnrolledRepo = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToBusinessRepoIII();
+            Repository<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
+            Repository<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
+            Repository<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
             Func<Person, Code_Value, ClassEnrolled, Option<StudentSchedule>> CreateStudent =
                 (p, Classification_cv, classEnroll)
                 => p.ClassificationId == Classification_cv.Id && p.Id == classEnroll.studentId ? Some(new StudentSchedule
@@ -316,7 +316,7 @@ namespace SimpleInventoryTest
             Func<int, int, int, string> createkeyy =
                 (pid, cv, cls)
                 => $"{pid}-{cv}-{cls}";
-            BusinessRepoIII<Func<Person, Code_Value, ClassEnrolled, Option<StudentSchedule>>, Func<int, int, int, string>> CreateStudentRepo1 =
+            Repository<Func<Person, Code_Value, ClassEnrolled, Option<StudentSchedule>>, Func<int, int, int, string>> CreateStudentRepo1 =
                 (val: CreateStudent, key: createkeyy);
 
 
@@ -366,11 +366,11 @@ namespace SimpleInventoryTest
         [Fact]
         public void Given_Different_Repo_Use_Partial_Function_to_apply_different_repo_finally_return_BusObj4()
         {
-            BusinessRepoIII<ClassEnrolled, int> modifiedClassRepo = ModifiedClassEnrolled.Select(x => (val: x, key: x.id)).ToBusinessRepoIII();
-            BusinessRepoIII<ClassEnrolled, int> classesEnrolledRepo = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToBusinessRepoIII();
-            BusinessRepoIII<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
-            BusinessRepoIII<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
-            BusinessRepoIII<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
+            Repository<ClassEnrolled, int> modifiedClassRepo = ModifiedClassEnrolled.Select(x => (val: x, key: x.id)).ToBusinessRepoIII();
+            Repository<ClassEnrolled, int> classesEnrolledRepo = ClassesEnrolled.Select(x => (val: x, key: x.id)).ToBusinessRepoIII();
+            Repository<Code_Value, int> ClassificationRepo = codevalues.Where(y => y.CodeSetId == 3).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
+            Repository<Code_Value, int> SubjectRepo = codevalues.Where(x => x.CodeSetId == 4).Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
+            Repository<Person, int> peopleRepo = lst.Select(x => (val: x, key: x.Id)).ToBusinessRepoIII();
             Func<Person, Code_Value, ClassEnrolled, Option<StudentSchedule>> CreateStudent =
                 (p, Classification_cv, classEnroll)
                 => p.ClassificationId == Classification_cv.Id && p.Id == classEnroll.studentId ? Some(new StudentSchedule
@@ -385,7 +385,7 @@ namespace SimpleInventoryTest
             Func<int, int, int, string> createkeyy =
                 (pid, cv, cls)
                 => $"{pid}-{cv}-{cls}";
-            BusinessRepoIII<Func<Person, Code_Value, ClassEnrolled, Option<StudentSchedule>>, Func<int, int, int, string>> CreateStudentRepo1 =
+            Repository<Func<Person, Code_Value, ClassEnrolled, Option<StudentSchedule>>, Func<int, int, int, string>> CreateStudentRepo1 =
                 (val: CreateStudent, key: createkeyy);
 
             var xyz = from p in peopleRepo.Data.Select(x => x.Value)

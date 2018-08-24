@@ -19,12 +19,12 @@ namespace SimpleInventory.Controllers
     {
         Func<Option<IEnumerable<Item>>> GetAllItems;
         Func<long,Option<Item>>GetItemByID;
-        private Func<BusinessRepoIII<Item,long>> GetItemRepo;
+        private Func<Repository<Item,long>> GetItemRepo;
         private InventoryBusinessRepo _InventoryRepo;
         public InventoryController(
             Func<Option<IEnumerable<Item>>> getallItems,
             Func<long,Option<Item>>getItembyID,
-            Func<BusinessRepoIII<Item, long>> getitemRepo,
+            Func<Repository<Item, long>> getitemRepo,
             InventoryBusinessRepo ivRepo)
         {
             GetAllItems = getallItems;
