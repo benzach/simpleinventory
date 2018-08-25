@@ -53,7 +53,7 @@ namespace SimpleInventory.BL
             => this.Values.Where(x => Pred(x.Value())).Select(y=>(y.Key,y.Value));
     }
 
-    public static class BusinessRepoIIIExt
+    public static class RepositoryExt
     {
         public static Repository<T, TKey> ToRepository<T, TKey>(this IEnumerable<(T, TKey)> @this)
             => new Repository<T, TKey>(@this);
