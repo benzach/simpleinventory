@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Functional.Lib\Functional.Lib.csproj" />
     <ProjectReference Include="..\SimpleInventory.DL\SimpleInventory.DL.csproj" />
   </ItemGroup>

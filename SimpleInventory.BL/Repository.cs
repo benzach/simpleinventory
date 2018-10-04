@@ -3,7 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using  static SimpleInventory.BL.BusinessRepoExt;
+using SimpleInventory.DL.Models;
+using static Functional.Lib.Functional.F;
 
 namespace SimpleInventory.BL
 {
@@ -51,8 +54,39 @@ namespace SimpleInventory.BL
             => this.Values.Where(x => predicate(x.Key)).Select(y=>(y.Key,y.Value));
         public IEnumerable<(TKey Key, Func<T> Value)> GetByT(Func<T, bool> Pred)
             => this.Values.Where(x => Pred(x.Value())).Select(y=>(y.Key,y.Value));
+        //public IEnumerable<(TKey Key,T Value) > ReconcileWithDataStore(EFDataStoreSink  sink,Func<DbContext,IEnumerable<(TKey Key,T Value)>> f)
+        //{
+        //    var a = sink.ReportAll(f)();
+        //    this.Values.
+        //}
+        public static Repository<T, TKey> ReconcileWithDataStore<DB>(EFDataStoreSink<DB> sink, Func<DB, IEnumerable<(T val, TKey key)>> f)
+            => sink.ReportAll(f)().ToRepository();
+        
     }
+    public sealed class EFDataStoreSink<DB>:IDisposable
+    {
+        private readonly DB _DB;
+        private readonly Option<Action> mCloseupIfStillAvailable;
+        private readonly Action<Action> mLock = NewLock();
+        public EFDataStoreSink(DB dbcontext)
+        {
+            _DB = dbcontext; 
+            //_SimpleInventoryDbContext = dbcontext as SimpleInventoryContext;
+        }
+        public void Close() => mCloseupIfStillAvailable.Match(() => new Action(() => throw new Exception("already close")), x => x);
 
+        public void Dispose() => Close();
+        
+        public  Func<IEnumerable<(T Value,TKey Key)>> ReportAll<T,TKey>(Func<DB, IEnumerable<(T Value, TKey Key)>> f)
+        {
+            //var a = f(_SimpleInventoryContext);
+            var ret = Enumerable.Empty< (T Value,TKey Key)>(); //IEnumerable<(TKey key,T Value)>
+            mLock(()=>
+                ret=f(_DB)
+            );
+            return () => ret;
+        }
+    }
     public static class RepositoryExt
     {
         public static Repository<T, TKey> ToRepository<T, TKey>(this IEnumerable<(T, TKey)> @this)
@@ -81,6 +115,8 @@ namespace SimpleInventory.BL
                 from t in BT1.Data
                 select (F.Apply(ft.Value(), t.Value()), F.Apply(ft.Key, t.Key)))
                 .ToRepository();
+        public static Repository<R, RKey> SelectMany<T, R, TKey, RKey>(this Repository<T, TKey> @this, Func<(T value, TKey), Repository<R, RKey>> bind)
+            => @this.SelectMany(bind, (tvalkey, rvalkey) => rvalkey);
         public static Repository<RR, RRKey> SelectMany<T, R, RR, TKey, RKey, RRKey>(
             this Repository<T, TKey> @this,
             Func<(T value, TKey key), Repository<R, RKey>> bind,
