@@ -11,7 +11,6 @@ using static Functional.Lib.Functional.F;
 namespace SimpleInventoryTest
 {
       
-       //source 00-set-vars.sh -g simpleInventoryResourceGrp -s e57e2b35-1323-46bc-be09-fdedf7bcf0d1 -n datllc-cluster -r simpleInventoryContainer -l eastus -c 73df779f-45c5-47ea-a750-74ab60014639 -p Hotdog2011
     public class MyList
     {
         private List<(int val,DateTime date)> lst = new List<(int val, DateTime date)>();
